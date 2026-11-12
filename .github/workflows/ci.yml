@@ -1,0 +1,28 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.14
+      - name: Install (frozen lockfile, never npm)
+        run: bun install --frozen-lockfile
+      - name: Typecheck
+        run: bun run typecheck
+      - name: Unit tests
+        run: bun run test:unit
+      - name: Adversarial tests (Codex, spec only)
+        run: bun run test:adversarial
+      - name: Copy lint
+        run: bun run lint:copy
+      - name: Order enumeration diff (builders vs Codex)
+        run: bun run solver-diff
+      - name: Web build
+        run: bun run build
