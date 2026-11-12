@@ -49,7 +49,7 @@ release builds always run P2 and ignore the query.
 
 ### Evidence and builds
 `bun run e2e` (debug build, headless Chromium, release CSP): P2 at 390x844 and 1024x1366 and P1 at
-390x844, 24 checks, all pass; 32 screenshots and `summary.json` in `docs/evidence/p0/`.
+390x844, 30 checks, all pass; 32 screenshots and `summary.json` in `docs/evidence/p0/`.
 `bun run ci` green (194 tests). Debug APK rebuilt after `bunx cap sync android`
 (`android/app/build/outputs/apk/debug/app-debug.apk`, not committed).
 
