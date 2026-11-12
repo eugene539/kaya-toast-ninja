@@ -18,9 +18,17 @@
     "ci": "bun run typecheck && bun run test && bun run lint:copy && bun run solver-diff && bun run build"
   },
   "dependencies": {
+    "@capacitor/android": "8.5.3",
+    "@capacitor/app": "8.1.2",
+    "@capacitor/core": "8.5.3",
+    "@capacitor/ios": "8.5.3",
+    "@capacitor/preferences": "8.0.1",
+    "@capacitor/splash-screen": "8.0.2",
+    "@capacitor/status-bar": "8.0.4",
     "phaser": "3.90.0"
   },
   "devDependencies": {
+    "@capacitor/cli": "8.5.3",
     "@types/bun": "1.4.4",
     "playwright-core": "1.65.0",
     "typescript": "7.0.2",

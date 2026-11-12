@@ -17,5 +17,5 @@
       "@core": ["./src/core/index.ts", "./spec/api.d.ts"]
     }
   },
-  "include": ["spec", "src", "tests", "tools", "vite.config.ts"]
+  "include": ["spec", "src", "tests", "tools", "vite.config.ts", "capacitor.config.ts"]
 }

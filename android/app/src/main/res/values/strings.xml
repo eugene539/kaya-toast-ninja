@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Kaya Toast Ninja</string>
+    <string name="title_activity_main">Kaya Toast Ninja</string>
+    <string name="package_name">com.geniusplusmath.kayatoastninja</string>
+    <string name="custom_url_scheme">com.geniusplusmath.kayatoastninja</string>
+</resources>
