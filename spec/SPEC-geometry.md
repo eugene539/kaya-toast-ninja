@@ -136,6 +136,18 @@ Otherwise `kind: "none"`, `lines: []`.
 with `|x - x_i| <= r`, or `null`. **Forgiveness only chooses which line a swipe snaps to. It never
 changes what the plate accepts** (SPEC-orders section 5).
 
+### 6.1 Later swipes after a partial cut
+
+After a partial cut the groups are drawn separated (section 8), so a remaining line is no longer
+where Rule A and Rule B would look for it. `resolveSwipeOnGroups(toast, d, path, cutLines, groups)`
+takes each still-joined group as drawn (`{ start, end, x, y, angle }`, centre in toast-local space,
+angle in degrees), maps the path into that group's own unseparated frame (undo the turn about the
+drawn centre, then shift to the group's original centre), and applies `resolveSwipe` with every
+line outside the group, or already cut, treated as already cut. The result is the union of the
+groups' new lines, ascending; `kind` is `across` if any group was crossed, else `along` if any
+group snapped, else `none`. With nothing cut there is one group in its original place and the
+result equals `resolveSwipe`.
+
 ## 7. Cut state and groups
 
 The cut state of one toast is its denominator and the set of cut line indices.

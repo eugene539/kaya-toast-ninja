@@ -1,0 +1,418 @@
+[
+  {
+    "viewport": {
+      "name": "phone",
+      "width": 390,
+      "height": 844
+    },
+    "checks": {
+      "halfMatched": true,
+      "quarterMatched": true,
+      "notYetShown": true,
+      "twoSixthsPlaced": true,
+      "healed": true,
+      "partialThenRest": true,
+      "playAgainCentreWorks": true,
+      "eighthsMatched": true,
+      "ended": true,
+      "noProblems": true
+    },
+    "problems": [],
+    "log": [
+      {
+        "label": "half served",
+        "phase": "matched",
+        "order": "P2-1-2",
+        "chosen": 2,
+        "cutLines": [
+          1
+        ],
+        "served": [
+          0
+        ],
+        "matched": true,
+        "notYets": 0,
+        "message": "Lovely!",
+        "canFill": true
+      },
+      {
+        "label": "quarter served",
+        "phase": "matched",
+        "order": "P2-1-4",
+        "chosen": 4,
+        "cutLines": [
+          1,
+          2,
+          3
+        ],
+        "served": [
+          2
+        ],
+        "matched": true,
+        "notYets": 0,
+        "message": "Lovely!",
+        "canFill": true
+      },
+      {
+        "label": "two sixths placed",
+        "phase": "cut",
+        "order": "P2-3-8",
+        "chosen": 6,
+        "cutLines": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "served": [
+          0,
+          1
+        ],
+        "matched": false,
+        "notYets": 0,
+        "message": "Flick the pieces onto the plate.",
+        "canFill": false
+      },
+      {
+        "label": "third sixth",
+        "phase": "busy",
+        "order": "P2-3-8",
+        "chosen": 6,
+        "cutLines": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "served": [
+          0,
+          1
+        ],
+        "matched": false,
+        "notYets": 1,
+        "message": "Not yet. Try another number of pieces.",
+        "canFill": false
+      },
+      {
+        "label": "healed",
+        "phase": "choose",
+        "order": "P2-3-8",
+        "chosen": null,
+        "cutLines": [],
+        "served": [],
+        "matched": false,
+        "notYets": 1,
+        "message": "Into how many?",
+        "canFill": null
+      },
+      {
+        "label": "partial cut",
+        "phase": "cut",
+        "order": "P2-3-8",
+        "chosen": 8,
+        "cutLines": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "served": [],
+        "matched": false,
+        "notYets": 1,
+        "message": "Keep cutting.",
+        "canFill": true
+      },
+      {
+        "label": "second cut",
+        "phase": "cut",
+        "order": "P2-3-8",
+        "chosen": 8,
+        "cutLines": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "served": [],
+        "matched": false,
+        "notYets": 1,
+        "message": "Flick the pieces onto the plate.",
+        "canFill": true
+      },
+      {
+        "label": "three eighths served",
+        "phase": "matched",
+        "order": "P2-3-8",
+        "chosen": 8,
+        "cutLines": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "served": [
+          1,
+          4,
+          6
+        ],
+        "matched": true,
+        "notYets": 1,
+        "message": "Lovely!",
+        "canFill": true
+      },
+      {
+        "label": "end",
+        "phase": "end",
+        "order": "P2-3-8",
+        "chosen": 8,
+        "cutLines": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "served": [
+          1,
+          4,
+          6
+        ],
+        "matched": true,
+        "notYets": 1,
+        "message": "All three orders served.",
+        "canFill": true
+      },
+      {
+        "label": "again",
+        "phase": "choose",
+        "order": "P2-1-2",
+        "chosen": null,
+        "cutLines": [],
+        "served": [],
+        "matched": false,
+        "notYets": 0,
+        "message": "Into how many?",
+        "canFill": null
+      }
+    ]
+  },
+  {
+    "viewport": {
+      "name": "tablet",
+      "width": 1024,
+      "height": 1366
+    },
+    "checks": {
+      "halfMatched": true,
+      "quarterMatched": true,
+      "notYetShown": true,
+      "twoSixthsPlaced": true,
+      "healed": true,
+      "partialThenRest": true,
+      "playAgainCentreWorks": true,
+      "eighthsMatched": true,
+      "ended": true,
+      "noProblems": true
+    },
+    "problems": [],
+    "log": [
+      {
+        "label": "half served",
+        "phase": "matched",
+        "order": "P2-1-2",
+        "chosen": 2,
+        "cutLines": [
+          1
+        ],
+        "served": [
+          0
+        ],
+        "matched": true,
+        "notYets": 0,
+        "message": "Lovely!",
+        "canFill": true
+      },
+      {
+        "label": "quarter served",
+        "phase": "matched",
+        "order": "P2-1-4",
+        "chosen": 4,
+        "cutLines": [
+          1,
+          2,
+          3
+        ],
+        "served": [
+          2
+        ],
+        "matched": true,
+        "notYets": 0,
+        "message": "Lovely!",
+        "canFill": true
+      },
+      {
+        "label": "two sixths placed",
+        "phase": "cut",
+        "order": "P2-3-8",
+        "chosen": 6,
+        "cutLines": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "served": [
+          0,
+          1
+        ],
+        "matched": false,
+        "notYets": 0,
+        "message": "Flick the pieces onto the plate.",
+        "canFill": false
+      },
+      {
+        "label": "third sixth",
+        "phase": "busy",
+        "order": "P2-3-8",
+        "chosen": 6,
+        "cutLines": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "served": [
+          0,
+          1
+        ],
+        "matched": false,
+        "notYets": 1,
+        "message": "Not yet. Try another number of pieces.",
+        "canFill": false
+      },
+      {
+        "label": "healed",
+        "phase": "choose",
+        "order": "P2-3-8",
+        "chosen": null,
+        "cutLines": [],
+        "served": [],
+        "matched": false,
+        "notYets": 1,
+        "message": "Into how many?",
+        "canFill": null
+      },
+      {
+        "label": "partial cut",
+        "phase": "cut",
+        "order": "P2-3-8",
+        "chosen": 8,
+        "cutLines": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "served": [],
+        "matched": false,
+        "notYets": 1,
+        "message": "Keep cutting.",
+        "canFill": true
+      },
+      {
+        "label": "second cut",
+        "phase": "cut",
+        "order": "P2-3-8",
+        "chosen": 8,
+        "cutLines": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "served": [],
+        "matched": false,
+        "notYets": 1,
+        "message": "Flick the pieces onto the plate.",
+        "canFill": true
+      },
+      {
+        "label": "three eighths served",
+        "phase": "matched",
+        "order": "P2-3-8",
+        "chosen": 8,
+        "cutLines": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "served": [
+          1,
+          4,
+          6
+        ],
+        "matched": true,
+        "notYets": 1,
+        "message": "Lovely!",
+        "canFill": true
+      },
+      {
+        "label": "end",
+        "phase": "end",
+        "order": "P2-3-8",
+        "chosen": 8,
+        "cutLines": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "served": [
+          1,
+          4,
+          6
+        ],
+        "matched": true,
+        "notYets": 1,
+        "message": "All three orders served.",
+        "canFill": true
+      },
+      {
+        "label": "again",
+        "phase": "choose",
+        "order": "P2-1-2",
+        "chosen": null,
+        "cutLines": [],
+        "served": [],
+        "matched": false,
+        "notYets": 0,
+        "message": "Into how many?",
+        "canFill": null
+      }
+    ]
+  }
+]

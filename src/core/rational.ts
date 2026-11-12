@@ -42,30 +42,57 @@ function checkR(a: Rational): void {
   if (!isRational(a)) throw new RangeError("not a rational");
 }
 
+function gcdBig(a: bigint, b: bigint): bigint {
+  if (a < 0n) a = -a;
+  if (b < 0n) b = -b;
+  while (b !== 0n) {
+    const t = a % b;
+    a = b;
+    b = t;
+  }
+  return a;
+}
+
+/** Normalises an exact BigInt fraction; RangeError when the reduced parts are not safe integers. */
+function fromBig(n: bigint, d: bigint): Rational {
+  if (d === 0n) throw new RangeError("denominator must not be zero");
+  if (n === 0n) return rat(0);
+  const g = gcdBig(n, d);
+  let nn = n / g;
+  let dd = d / g;
+  if (dd < 0n) {
+    nn = -nn;
+    dd = -dd;
+  }
+  const max = BigInt(Number.MAX_SAFE_INTEGER);
+  if (nn > max || nn < -max || dd > max) throw new RangeError("result is outside the safe integer range");
+  return Object.freeze({ n: Number(nn), d: Number(dd) });
+}
+
+// Every operation is exact: intermediates are BigInt, so nothing rounds before it cancels.
 export function add(a: Rational, b: Rational): Rational {
   checkR(a);
   checkR(b);
-  const g = gcd(a.d, b.d);
-  return rat(a.n * (b.d / g) + b.n * (a.d / g), (a.d / g) * b.d);
+  return fromBig(BigInt(a.n) * BigInt(b.d) + BigInt(b.n) * BigInt(a.d), BigInt(a.d) * BigInt(b.d));
 }
 
 export function sub(a: Rational, b: Rational): Rational {
+  checkR(a);
   checkR(b);
-  return add(a, rat(-b.n, b.d));
+  return fromBig(BigInt(a.n) * BigInt(b.d) - BigInt(b.n) * BigInt(a.d), BigInt(a.d) * BigInt(b.d));
 }
 
 export function mul(a: Rational, b: Rational): Rational {
   checkR(a);
   checkR(b);
-  const g1 = gcd(a.n, b.d) || 1;
-  const g2 = gcd(b.n, a.d) || 1;
-  return rat((a.n / g1) * (b.n / g2), (a.d / g2) * (b.d / g1));
+  return fromBig(BigInt(a.n) * BigInt(b.n), BigInt(a.d) * BigInt(b.d));
 }
 
 export function div(a: Rational, b: Rational): Rational {
+  checkR(a);
   checkR(b);
   if (b.n === 0) throw new RangeError("division by zero");
-  return mul(a, rat(b.d, b.n));
+  return fromBig(BigInt(a.n) * BigInt(b.d), BigInt(a.d) * BigInt(b.n));
 }
 
 export function eq(a: Rational, b: Rational): boolean {

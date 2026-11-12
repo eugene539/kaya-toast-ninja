@@ -304,3 +304,40 @@ describe("orders", () => {
     expect(C.DEMO_ORDERS.map((o) => o.spoken)).toEqual(["half of the toast", "a quarter of the toast", "three eighths of the toast"]);
   });
 });
+
+describe("rational exactness near the safe limit (Codex review round 1)", () => {
+  test("add and sub never round intermediates", () => {
+    const m = Number.MAX_SAFE_INTEGER;
+    expect(C.add(C.rat(m, 2), C.rat(-m, 3))).toEqual({ n: m, d: 6 });
+    expect(C.sub(C.rat(m, 2), C.rat(m, 3))).toEqual({ n: m, d: 6 });
+    expect(() => C.add(C.rat(m), C.rat(m))).toThrow(RangeError);
+    expect(C.mul(C.rat(m, 3), C.rat(3, m))).toEqual({ n: 1, d: 1 });
+  });
+});
+
+describe("later swipes resolve against the groups as drawn (Codex review round 1)", () => {
+  const d = 8;
+  const cut = [1, 2, 3, 4, 5];
+  const layout = C.layoutCut(T, d, cut, { gap: 5, fanDegrees: 2 });
+  const groups = C.groupsOf(d, cut).map((g) => {
+    const s = layout.filter((L) => L.index >= g.start && L.index <= g.end);
+    return { start: g.start, end: g.end, x: s.reduce((t, L) => t + L.x, 0) / s.length, y: s.reduce((t, L) => t + L.y, 0) / s.length, angle: s[0]!.angle };
+  });
+  const last = groups[groups.length - 1]!;
+  // Where line 6 is drawn now: the group's turn applied about its drawn centre.
+  const ox = (C.snapLineX(T, d, 5) + 150) / 2;
+  const a = (last.angle * Math.PI) / 180;
+  const off = C.snapLineX(T, d, 6) - ox;
+  const drawn = { x: last.x + off * Math.cos(a), y: last.y + off * Math.sin(a) };
+  test("crossing the drawn line 6 cuts it, though the unseparated line 6 is elsewhere", () => {
+    const path = [{ x: drawn.x - 6, y: drawn.y }, { x: drawn.x + 6, y: drawn.y }];
+    expect(drawn.x - C.snapLineX(T, d, 6)).toBeGreaterThan(10);
+    expect(C.resolveSwipeOnGroups(T, d, path, cut, groups)).toEqual({ kind: "across", lines: [6] });
+  });
+  test("a full sweep cuts the rest; nothing cut means plain resolveSwipe", () => {
+    const sweep = [{ x: -220, y: 0 }, { x: 220, y: 0 }];
+    expect(C.resolveSwipeOnGroups(T, d, sweep, cut, groups).lines).toEqual([6, 7]);
+    const whole = [{ start: 0, end: 7, x: 0, y: 0, angle: 0 }];
+    expect(C.resolveSwipeOnGroups(T, d, sweep, [], whole)).toEqual(C.resolveSwipe(T, d, sweep, []));
+  });
+});

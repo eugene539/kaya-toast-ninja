@@ -16,7 +16,7 @@ import {
   makePartition,
   marksFor,
   plateSlots,
-  resolveSwipe,
+  resolveSwipeOnGroups,
   serve,
   snapLineX,
   worldToLocal,
@@ -95,7 +95,8 @@ export class PrototypeScene extends Phaser.Scene {
   private trail!: Phaser.GameObjects.Graphics;
   private trailPts: Vec2[] = [];
   private crumbs: Phaser.GameObjects.Rectangle[] = [];
-  private buttons: Array<{ id: string; x: number; y: number; r: number }> = [];
+  /** Hit areas in design space, matching what is drawn (centre and half sizes). */
+  private buttons: Array<{ id: string; x: number; y: number; hw: number; hh: number }> = [];
 
   constructor() {
     super("Prototype");
@@ -202,7 +203,7 @@ export class PrototypeScene extends Phaser.Scene {
   }
 
   private hitButton(p: Vec2): string | null {
-    for (const b of this.buttons) if (Math.hypot(p.x - b.x, p.y - b.y) <= b.r) return b.id;
+    for (const b of this.buttons) if (Math.abs(p.x - b.x) <= b.hw && Math.abs(p.y - b.y) <= b.hh) return b.id;
     return null;
   }
 
@@ -235,7 +236,7 @@ export class PrototypeScene extends Phaser.Scene {
     }
     const pose = this.frozenPose ?? this.pose;
     const local = path.map((q) => worldToLocal(pose, q));
-    const res = resolveSwipe(TOAST, this.chosen, local, this.cutLines);
+    const res = resolveSwipeOnGroups(TOAST, this.chosen, local, this.cutLines, this.groupPoses(this.chosen));
     if (res.lines.length === 0) return;
     this.cutLines = [...this.cutLines, ...res.lines].sort((a, b) => a - b);
     this.swipesOnPartition += 1;
@@ -252,6 +253,21 @@ export class PrototypeScene extends Phaser.Scene {
    */
   private layout(d: number, cut: ReadonlyArray<number>) {
     return layoutCut(TOAST, d, cut, d >= 6 ? { gap: 5, fanDegrees: 2 } : { gap: 6, fanDegrees: 6 });
+  }
+
+  /** Each still-joined group as drawn, for resolving later swipes (SPEC-geometry 6.1). */
+  private groupPoses(d: number) {
+    const layout = this.layout(d, this.cutLines);
+    return groupsOf(d, this.cutLines).map((g) => {
+      const strips = layout.filter((L) => L.index >= g.start && L.index <= g.end);
+      return {
+        start: g.start,
+        end: g.end,
+        x: strips.reduce((t, L) => t + L.x, 0) / strips.length,
+        y: strips.reduce((t, L) => t + L.y, 0) / strips.length,
+        angle: strips[0]!.angle,
+      };
+    });
   }
 
   /** Strip index of a separated, unserved piece under the design point, or null. */
@@ -289,7 +305,7 @@ export class PrototypeScene extends Phaser.Scene {
     this.order = DEMO_ORDERS[idx]!;
     this.notYets = 0;
     this.resetToast();
-    this.resultLayer.removeAll(true);
+    this.clearResult();
     this.dialLayer.setVisible(true);
     this.drawBubble();
     this.phase = "choose";
@@ -300,7 +316,7 @@ export class PrototypeScene extends Phaser.Scene {
   private nextOrder(): void {
     if (this.orderIdx + 1 < DEMO_ORDERS.length) return this.beginOrder(this.orderIdx + 1);
     this.phase = "end";
-    this.resultLayer.removeAll(true);
+    this.clearResult();
     this.say(COPY.allServed);
     this.addButton(this.resultLayer, "again", 195, 760, COPY.playAgain);
   }
@@ -585,7 +601,7 @@ export class PrototypeScene extends Phaser.Scene {
     r.lineStyle(2, INK, 1).beginPath().arc(REPLAY.x + 4, REPLAY.y, 8, -0.9, 0.9).strokePath();
     this.bubble.add(r);
     this.buttons = this.buttons.filter((b) => b.id !== "replay");
-    this.buttons.push({ id: "replay", x: REPLAY.x, y: REPLAY.y, r: REPLAY.r + 10 });
+    this.buttons.push({ id: "replay", x: REPLAY.x, y: REPLAY.y, hw: REPLAY.r + 10, hh: REPLAY.r + 10 });
   }
 
   private dialPos(k: number): Vec2 {
@@ -609,7 +625,7 @@ export class PrototypeScene extends Phaser.Scene {
       b.lineStyle(3, INK, 1).strokeCircle(p.x, p.y, 24);
       const t = this.add.text(p.x, p.y, String(d), { fontFamily: FONT, fontSize: "24px", color: "#2b1d14", fontStyle: "bold" }).setOrigin(0.5);
       this.dialLayer.add([b, t]);
-      this.buttons.push({ id: `dial:${d}`, x: p.x, y: p.y, r: 28 });
+      this.buttons.push({ id: `dial:${d}`, x: p.x, y: p.y, hw: 26, hh: 26 });
     });
     this.dialPointer = this.add.container(DIAL_C.x, DIAL_C.y);
     const ptr = this.add.graphics();
@@ -629,8 +645,13 @@ export class PrototypeScene extends Phaser.Scene {
     this.tweens.add({ targets: this.dialPointer, angle: angleDeg, duration: 160, ease: "Back.easeOut" });
   }
 
-  private showResult(): void {
+  private clearResult(): void {
     this.resultLayer.removeAll(true);
+    this.buttons = this.buttons.filter((b) => b.id !== "next" && b.id !== "again");
+  }
+
+  private showResult(): void {
+    this.clearResult();
     const label = labelFor(this.order);
     if (label.stacked) {
       this.resultLayer.add(stackedFraction(this, 340, 590, label.stacked.numerator, label.stacked.denominator, { size: 30, color: "#2b1d14", barColor: INK }));
@@ -663,7 +684,7 @@ export class PrototypeScene extends Phaser.Scene {
     const t = this.add.text(x, y, text, { fontFamily: FONT, fontSize: "24px", color: "#2b1d14", fontStyle: "bold" }).setOrigin(0.5);
     layer.add([g, t]);
     this.buttons = this.buttons.filter((b) => b.id !== id);
-    this.buttons.push({ id, x, y, r: 40 });
+    this.buttons.push({ id, x, y, hw: 92, hh: 30 });
   }
 
   private showStart(): void {

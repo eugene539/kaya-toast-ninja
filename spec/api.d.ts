@@ -148,6 +148,22 @@ export function resolveSwipe(
   path: ReadonlyArray<Vec2>,
   alreadyCut?: ReadonlyArray<number>,
 ): SwipeResult;
+/** A still-joined group as drawn: strips start..end, centre (x, y) in toast-local space, angle in degrees. */
+export interface GroupPose {
+  readonly start: number;
+  readonly end: number;
+  readonly x: number;
+  readonly y: number;
+  readonly angle: number;
+}
+/** SPEC-geometry 6.1: resolves a later swipe against the separated groups as drawn. */
+export function resolveSwipeOnGroups(
+  toast: ToastSpec,
+  d: number,
+  path: ReadonlyArray<Vec2>,
+  cutLines: ReadonlyArray<number>,
+  groups: ReadonlyArray<GroupPose>,
+): SwipeResult;
 export function forgivenessRadius(toast: ToastSpec, d: number): number;
 export function snapToLine(toast: ToastSpec, d: number, x: number): number | null;
 

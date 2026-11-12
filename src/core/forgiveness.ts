@@ -128,3 +128,49 @@ export function resolveSwipe(
   }
   return NONE;
 }
+
+export interface GroupPose {
+  readonly start: number;
+  readonly end: number;
+  /** Centre of the group in toast-local space after separation, and its turn in degrees. */
+  readonly x: number;
+  readonly y: number;
+  readonly angle: number;
+}
+
+/**
+ * Resolves a swipe against the toast as it is drawn after a partial cut (SPEC-geometry 6.1): each
+ * still-joined group is tested in its own frame (undoing its separation shift and turn), only for
+ * the lines inside it. With nothing cut this is exactly resolveSwipe.
+ */
+export function resolveSwipeOnGroups(
+  toast: ToastSpec,
+  d: number,
+  path: ReadonlyArray<Vec2>,
+  cutLines: ReadonlyArray<number>,
+  groups: ReadonlyArray<GroupPose>,
+): SwipeResult {
+  checkDenominator(d);
+  const cut = new Set(cutLines);
+  const lines = new Set<number>();
+  let kind: SwipeKind = "none";
+  for (const g of groups) {
+    if (g.end <= g.start) continue; // a single strip has no line inside it
+    const ox = (edgeX(toast, d, g.start) + edgeX(toast, d, g.end + 1)) / 2;
+    const a = (-g.angle * Math.PI) / 180;
+    const c = Math.cos(a);
+    const s = Math.sin(a);
+    const mapped = path.map((p) => {
+      const dx = p.x - g.x;
+      const dy = p.y - g.y;
+      return { x: dx * c - dy * s + ox, y: dx * s + dy * c };
+    });
+    const others: number[] = [];
+    for (let i = 1; i <= d - 1; i++) if (i <= g.start || i > g.end || cut.has(i)) others.push(i);
+    const r = resolveSwipe(toast, d, mapped, others);
+    if (r.kind === "across") kind = "across";
+    else if (r.kind === "along" && kind === "none") kind = "along";
+    for (const i of r.lines) lines.add(i);
+  }
+  return { kind, lines: [...lines].sort((x, y) => x - y) };
+}

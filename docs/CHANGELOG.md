@@ -53,3 +53,17 @@ Code worker for lanes B and C. Local git only; no remote exists yet.
 ### Other
 - `bun run build` and `bun run dev` run Vite under the bun runtime (`bun --bun vite`): under Node 24
   on this Mac rolldown could not load its native binding. bun is the ruled toolchain anyway.
+
+### Codex review, round 1 (`codex review --base 65f0a9f`, gpt-6-astra, read-only)
+Four findings, all P2, all verified and fixed; none rejected.
+1. Later swipes after a partial cut were tested against the unseparated snap lines, so a moved
+   line could not be cut. Fixed with `resolveSwipeOnGroups` in the core (SPEC-geometry 6.1, added
+   to `api.d.ts`), used by the scene; unit tests show the drawn line 6 cuts after lines 1 to 5.
+2. The stale Next hit target shadowed the centre of Play again. Fixed: clearing the result layer
+   removes its hit targets; the e2e run now taps the centre of Play again.
+3. Button hit areas were 80 unit circles on 180 by 52 pills. Fixed: rectangular hit areas matching
+   what is drawn (dial and replay too).
+4. `add` lost exactness for large safe operands. Fixed: add, sub, mul and div compute in BigInt and
+   throw RangeError only when the reduced result is not a safe integer.
+Round 2 was not run in this session (the brief asked for one round; the weekly Codex meter read
+86 percent throughout).

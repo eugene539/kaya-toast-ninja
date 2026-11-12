@@ -128,7 +128,20 @@ try {
     await snap("healed");
     await shot("03-eighths-healed");
     await tap(page, await btn(page, "dial:8"));
+    // A partial swipe (lines 1 to 5 only), then a second swipe must still cut the moved group.
+    {
+      const a: Pt = await page.evaluate(() => (window as any).__ktn.toastPoint(-185, 0));
+      const b: Pt = await page.evaluate(() => (window as any).__ktn.toastPoint(50, 0));
+      await page.mouse.move(a.x, a.y);
+      await page.mouse.down();
+      await page.mouse.move(b.x, b.y, { steps: 6 });
+      await page.mouse.up();
+      await wait(350);
+    }
+    await snap("partial cut");
+    await shot("03-eighths-partial-cut");
     await swipeAcross(page);
+    await snap("second cut");
     await shot("03-eighths-eight-cut");
     await servePiece(page, 1);
     await servePiece(page, 4, true);
@@ -140,6 +153,10 @@ try {
     await wait(200);
     await snap("end");
     await shot("04-end");
+    // Tap the centre of Play again, then the left edge of the Start-sized pill hit area check.
+    await tap(page, await btn(page, "again"));
+    await wait(200);
+    await snap("again");
 
     const byLabel = Object.fromEntries(log.map((l) => [l.label, l]));
     const checks = {
@@ -148,6 +165,10 @@ try {
       notYetShown: (byLabel["third sixth"] as any).message === "Not yet. Try another number of pieces.",
       twoSixthsPlaced: (byLabel["two sixths placed"] as any).served.length === 2,
       healed: (byLabel["healed"] as any).chosen === null && (byLabel["healed"] as any).cutLines.length === 0,
+      partialThenRest:
+        JSON.stringify((byLabel["partial cut"] as any).cutLines) === "[1,2,3,4,5]" &&
+        (byLabel["second cut"] as any).cutLines.length === 7,
+      playAgainCentreWorks: (byLabel["again"] as any).phase === "choose" && (byLabel["again"] as any).order === "P2-1-2",
       eighthsMatched: (byLabel["three eighths served"] as any).matched === true,
       ended: (byLabel["end"] as any).phase === "end",
       noProblems: problems.length === 0,
