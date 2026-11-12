@@ -1,6 +1,6 @@
 # SPEC-orders: order generators, answer forms, spoken forms, the serve rule and marks
 
-Status: Phase 0, version 1 (12 Nov 2026). The Maths lens ruling is in section 9. Every rule
+Status: Phase 0, version 1 (12 Nov 2026). The Maths lens ruling is in section 10. Every rule
 is overrulable by the owner; until then it is the rule the code, the tests and the enumeration
 follow. Functions named here are declared in `spec/api.d.ts` and imported as `@core`.
 
@@ -84,9 +84,11 @@ nothing served, total 0 and `matched: false`. Rules, applied in this order:
    plate once).
 4. The plate already holds pieces of another partition id: `"otherPartition"`, unchanged
    (pieces from two partitions are refused; they boing back).
-5. `total + size > target`: `"notYet"`, unchanged. The piece boings back, the scene says
-   **"Not yet. Try another number of pieces."**, the plate empties and the toast heals (every
-   piece rejoins, the lines go, the dial is offered again). Never a fail state, never a cross.
+5. `total + size > target`: `"notYet"`, and the returned plate is the input plate, unchanged
+   (the core never empties it). The scene then makes the piece boing back, says
+   **"Not yet. Try another number of pieces."**, replaces the plate with `emptyPlate(target)` and
+   heals the toast (every piece rejoins, the lines go, the dial is offered again). Never a fail
+   state, never a cross.
 6. Otherwise the piece is added (the plate takes its partition id if it had none). If the new
    total equals the target exactly: `"matched"`, else `"placed"`.
 

@@ -16,7 +16,7 @@ export interface Rational {
   readonly d: number;
 }
 
-/** Builds a normalised rational. Throws RangeError if d is 0 or either part is not a safe integer. */
+/** Builds a normalised rational; d defaults to 1. Throws RangeError if d is 0 or either part is not a safe integer. */
 export function rat(n: number, d?: number): Rational;
 export function add(a: Rational, b: Rational): Rational;
 export function sub(a: Rational, b: Rational): Rational;

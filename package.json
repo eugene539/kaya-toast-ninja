@@ -5,9 +5,9 @@
   "type": "module",
   "description": "Kaya Toast Ninja: a free fractions arcade for P1 and P2 children by Genius Plus Academy.",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
+    "dev": "bun --bun vite",
+    "build": "bun --bun vite build",
+    "preview": "bun --bun vite preview",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "bun test tests/unit tests/adversarial",
     "test:unit": "bun test tests/unit",
