@@ -1,0 +1,143 @@
+name: iOS
+# D-124: iOS builds run here on GitHub's macOS runners (Xcode preinstalled); this Mac has no Xcode.
+# Job 1 builds an unsigned Debug app for the iOS Simulator on every push to main and every pull
+# request. Job 2 (signed TestFlight upload) is a disabled stub until the Apple developer account is
+# active and its secrets exist.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  simulator-build:
+    # macos-26 carries Xcode 26 [VERIFY the label on the first run; fall back to macos-15 and the
+    # newest Xcode_26 there if the label is not yet available to this account].
+    runs-on: macos-26
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.14
+      - name: Select the newest Xcode 26
+        run: |
+          XC=$(ls -d /Applications/Xcode_26*.app 2>/dev/null | sort -V | tail -1)
+          if [ -z "$XC" ]; then echo "No Xcode 26 on this runner"; ls -d /Applications/Xcode*; exit 1; fi
+          sudo xcode-select -s "$XC/Contents/Developer"
+          xcodebuild -version
+      - name: Install (frozen lockfile, never npm)
+        run: bun install --frozen-lockfile
+      - name: Web build (release CSP kept)
+        run: bun run build
+      - name: Capacitor sync (iOS, Swift Package Manager)
+        run: bunx cap sync ios
+      - name: Resolve Swift packages
+        run: xcodebuild -resolvePackageDependencies -project ios/App/App.xcodeproj -scheme App
+      - name: Build for the iOS Simulator (no signing)
+        run: |
+          xcodebuild build \
+            -project ios/App/App.xcodeproj \
+            -scheme App \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -destination "generic/platform=iOS Simulator" \
+            -derivedDataPath build/ios \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY=""
+      - name: Inspect the app (bundle id, minimum iOS, orientations, no ATS exceptions)
+        run: |
+          APP=build/ios/Build/Products/Debug-iphonesimulator/App.app
+          plutil -p "$APP/Info.plist" | tee info.txt
+          grep -q '"CFBundleIdentifier" => "com.geniusplusmath.kayatoastninja"' info.txt
+          grep -q '"MinimumOSVersion" => "15.0"' info.txt
+          if grep -q NSAppTransportSecurity info.txt; then echo "No ATS exceptions allowed"; exit 1; fi
+          test -f "$APP/public/index.html"
+          grep -q "capacitor://localhost" "$APP/public/index.html"
+      - name: Zip the .app
+        run: cd build/ios/Build/Products/Debug-iphonesimulator && ditto -c -k --keepParent App.app "$GITHUB_WORKSPACE/KayaToastNinja-simulator.app.zip"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kaya-toast-ninja-ios-simulator-app
+          path: KayaToastNinja-simulator.app.zip
+          if-no-files-found: error
+          retention-days: 14
+
+  # ---------------------------------------------------------------------------------------------
+  # DISABLED STUB: signed archive and TestFlight upload. Enable when the Apple developer account is
+  # active (D-123 item 2): create an App Store Connect API key (App Manager role), add the repo
+  # secrets below (names only here, never values), register the bundle id
+  # com.geniusplusmath.kayatoastninja and the app record, then delete "if: false".
+  # Signing is cloud-managed by Xcode through the API key (-allowProvisioningUpdates), so no
+  # certificate or profile is stored in the repo.
+  # Secrets: APPLE_TEAM_ID, APP_STORE_CONNECT_KEY_ID, APP_STORE_CONNECT_ISSUER_ID,
+  #          APP_STORE_CONNECT_KEY_P8_BASE64 (the .p8 file, base64 encoded)
+  # ---------------------------------------------------------------------------------------------
+  testflight:
+    if: false
+    needs: simulator-build
+    runs-on: macos-26
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.14
+      - name: Select the newest Xcode 26
+        run: |
+          XC=$(ls -d /Applications/Xcode_26*.app | sort -V | tail -1)
+          sudo xcode-select -s "$XC/Contents/Developer"
+      - run: bun install --frozen-lockfile
+      - run: bun run build
+      - run: bunx cap sync ios
+      - name: Write the API key
+        env:
+          KEY_P8_BASE64: ${{ secrets.APP_STORE_CONNECT_KEY_P8_BASE64 }}
+          KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/asc"
+          echo "$KEY_P8_BASE64" | base64 --decode > "$RUNNER_TEMP/asc/AuthKey_$KEY_ID.p8"
+      - name: Archive (Release, automatic cloud signing)
+        env:
+          TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+        run: |
+          xcodebuild archive \
+            -project ios/App/App.xcodeproj -scheme App -configuration Release \
+            -destination "generic/platform=iOS" \
+            -archivePath "$RUNNER_TEMP/App.xcarchive" \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "$RUNNER_TEMP/asc/AuthKey_$KEY_ID.p8" \
+            -authenticationKeyID "$KEY_ID" -authenticationKeyIssuerID "$ISSUER_ID" \
+            DEVELOPMENT_TEAM="$TEAM_ID" CODE_SIGN_STYLE=Automatic \
+            CURRENT_PROJECT_VERSION="${{ github.run_number }}"
+      - name: Export and upload to TestFlight
+        env:
+          TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+        run: |
+          cat > "$RUNNER_TEMP/ExportOptions.plist" <<PLIST
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0"><dict>
+            <key>method</key><string>app-store-connect</string>
+            <key>destination</key><string>upload</string>
+            <key>teamID</key><string>$TEAM_ID</string>
+            <key>signingStyle</key><string>automatic</string>
+            <key>manageAppVersionAndBuildNumber</key><false/>
+          </dict></plist>
+          PLIST
+          xcodebuild -exportArchive \
+            -archivePath "$RUNNER_TEMP/App.xcarchive" \
+            -exportOptionsPlist "$RUNNER_TEMP/ExportOptions.plist" \
+            -exportPath "$RUNNER_TEMP/export" \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "$RUNNER_TEMP/asc/AuthKey_$KEY_ID.p8" \
+            -authenticationKeyID "$KEY_ID" -authenticationKeyIssuerID "$ISSUER_ID"
+      - name: Remove the API key
+        if: always()
+        run: rm -rf "$RUNNER_TEMP/asc"

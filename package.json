@@ -8,6 +8,7 @@
     "dev": "bun --bun vite",
     "build": "bun --bun vite build",
     "preview": "bun --bun vite preview",
+    "serve:lan": "bun run build && bun --bun vite preview --host 0.0.0.0 --port 4173 --strictPort",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "bun test tests/unit tests/adversarial",
     "test:unit": "bun test tests/unit",
@@ -15,7 +16,9 @@
     "lint:copy": "bun tools/copy-lint.ts",
     "orders": "bun tools/enumerate-orders.ts",
     "solver-diff": "bun tools/solver-diff.ts",
-    "ci": "bun run typecheck && bun run test && bun run lint:copy && bun run solver-diff && bun run build"
+    "ci": "bun run typecheck && bun run test && bun run lint:copy && bun run solver-diff && bun run build",
+    "cap:sync": "bun run build && bunx cap sync",
+    "android:debug": "bun run cap:sync && cd android && ./gradlew assembleDebug"
   },
   "dependencies": {
     "@capacitor/android": "8.5.3",
