@@ -18,3 +18,24 @@
 - Phaser's own input is off; every hit test is ours, in design space.
 - `tools/`: `enumerate-orders.ts` and `solver-diff.ts` (builders against Codex), `copy-lint.ts`,
   `e2e-evidence.ts` (headless run at phone and tablet sizes into `docs/evidence/p0/`).
+
+## Native shell (Phase 0, lane A)
+
+- Capacitor 8.5.3 wraps the same Vite build (`dist/`, `webDir` in `capacitor.config.ts`). There is
+  one code path: the browser, the Android WebView and the iOS WKWebView all run the same bundle.
+- `android/` and `ios/` are committed Capacitor projects. Generated copies (`public/`,
+  `capacitor.config.json`, plugin lists) are ignored and rebuilt by `bunx cap sync`.
+- iOS uses Swift Package Manager (`ios/App/CapApp-SPM/Package.swift`, managed by the CLI), not
+  CocoaPods. The project and its shared scheme `App` build headless with `xcodebuild` on GitHub's
+  macOS runners (D-124); this Mac has no Xcode.
+- Origins: Android serves from `https://localhost`, iOS from `capacitor://localhost`; both are
+  stated in `capacitor.config.ts` and allowed by the release CSP's `connect-src`.
+- Plugins are official and local only: App (lifecycle), Preferences (the save, Phase 1),
+  Splash Screen, Status Bar. Nothing reaches the network.
+- `src/game/lifecycle.ts` turns App `pause` and `resume` (native) and `visibilitychange` (browser
+  and WebView) into one pair of idempotent handlers. The scene suspends Web Audio and stops the
+  placeholder voice on pause and resumes audio on resume; a failed resume is recovered by the next
+  tap (`Sfx.unlock`). `src/core` never imports Phaser, Capacitor or the DOM
+  (`tests/unit/core-purity.test.ts`).
+- Icons and splash images are generated from `resources/icon-1024.png` by
+  `tools/native-assets.sh` (macOS `sips`); rerun it when the icon changes.

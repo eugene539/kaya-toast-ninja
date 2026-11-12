@@ -1,5 +1,40 @@
 # CHANGELOG
 
+## Phase 0 (12 Nov 2026), native lane A: Capacitor shell, lifecycle, CI for Android and iOS
+
+### Built
+- Capacitor 8.5.3 (core, cli, android, ios, pinned exactly) with the official plugins App 8.1.2,
+  Preferences 8.0.1, Splash Screen 8.0.2 and Status Bar 8.0.4. Haptics left out (optional; would
+  add VIBRATE). `capacitor.config.ts`: appId `com.geniusplusmath.kayatoastninja`, appName
+  "Kaya Toast Ninja", origins stated explicitly (https://localhost, capacitor://localhost).
+- `android/`: minSdk 24, compileSdk and targetSdk 36, portrait lock, `appCategory="game"`, icon
+  orange adaptive background, game-brown splash. Debug APK built locally with Gradle 8.14.3, AGP
+  8.13.0, JDK 21 and inspected with aapt2 (docs/PLATFORM.md). INTERNET is present in the debug
+  build, as generated; the release decision waits for a device test.
+- `ios/`: iOS 15.0, Swift Package Manager (no CocoaPods), UIScene lifecycle, portrait only with
+  `UIRequiresFullScreen`, no ATS exceptions, `ITSAppUsesNonExemptEncryption` NO, a shared `App`
+  scheme. Generated without Xcode; it is compiled only in GitHub Actions (D-124).
+- Icons and splash from `resources/icon-1024.png` (a copy of the lock-set export) by
+  `tools/native-assets.sh` (macOS sips, no new dependency).
+- Lifecycle (`src/game/lifecycle.ts`): App pause and resume plus visibilitychange; audio suspends
+  on pause and resumes on resume, iOS interruptions and route changes retry while in front, and
+  the next tap still recovers a failed resume. The placeholder voice stops on pause.
+  `tests/unit/core-purity.test.ts` keeps Phaser, Capacitor and the DOM out of `src/core`.
+- Workflows: `android.yml` (debug APK artifact with aapt2 checks) and `ios.yml` (unsigned
+  Simulator build on macos-26 with Xcode 26, Info.plist checks, zipped .app artifact; a disabled
+  TestFlight job naming its secrets only). They run once the GitHub remote exists.
+- `bun run serve:lan` (release build, CSP intact, port 4173 on the LAN) for the iPad in Safari;
+  `bun run cap:sync`; `bun run android:debug`. Steps in docs/RELEASE.md.
+- Docs: PLATFORM.md rewritten as the verified matrix; ARCHITECTURE.md native section; RELEASE.md.
+
+### Decisions taken as overrulable defaults
+1. Capacitor core 8.5.3, not 8.6.0 (the ruling says 8.5.x). Plugins at their newest 8.x.
+2. iPad is portrait only (plus upside down) with `UIRequiresFullScreen`; landscape is not
+   letterboxed in the native shell. iPadOS 26 deprecates that key [VERIFY on device].
+3. Android adaptive icon: the full icon at the 66dp safe zone on its own orange (#FF844F).
+4. The headless e2e evidence run still passes all checks with the lifecycle code (re-run on
+   12 Nov; screenshots not re-committed).
+
 ## Phase 0 (12 Nov 2026), web lane: spec, core, Codex tests, prototype
 
 Code worker for lanes B and C. Local git only; no remote exists yet.
