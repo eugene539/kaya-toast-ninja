@@ -19,6 +19,12 @@ export const COPY = {
   markExact: "Exact",
   markSmart: "Smart",
   markTidy: "Tidy",
+  // Spoken (and shown) when a child taps an earned mark: what it was for, in a few words.
+  markExactWhy: "Exact. Right the first time.",
+  markSmartWhy: "Smart. The fewest pieces.",
+  markTidyWhy: "Tidy. One swipe did it.",
+  dialCaption: "pieces",
+  startAgain: "New toast. Swipe across it.",
 } as const;
 
 /** The customer's line: the spoken order with a capital letter and "please". */

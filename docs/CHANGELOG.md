@@ -1,5 +1,58 @@
 # CHANGELOG
 
+## Phase 0 (12 Nov 2026), post-QC fixes (POSTQC-KTN-P0-2026-11-12, review of 163d5af)
+
+### FIX items (six of seven; landscape is handled by the portrait lock in the shells)
+1. **Marks**: only earned marks are shown, each an icon drawn in code plus one word, dark ink on
+   gold (about 13 to 1 contrast): a bullseye for Exact, a bulb for Smart, one streak for Tidy.
+   Tapping a mark says and shows what it was for ("Smart. The fewest pieces."). No greyed chip,
+   nothing that reads as a miss. Semantics unchanged from PLAN-v4.
+2. **Nelli's line** wraps inside a cream pill, at most 316 units wide (the e2e run checks it stays
+   inside a 16 unit margin); "Not yet" now reads on two lines.
+3. **Never stuck**: after a cut, tapping any number on the dial starts the toast again (the plate
+   empties, the toast heals and is cut into the new number; "New toast. Swipe across it.").
+   Before the first cut the dial stays free. Starting again after a cut costs Exact only, like a
+   "Not yet" (SPEC-orders section 8 updated). Tapping a joined strip now nudges it (boing).
+4. **Target on the plate before serving** (teacher's call, overrulable): one undivided gold region
+   with a dashed edge from the left, as wide as the order is of the whole. It shows how much
+   against the whole (the PLAN-v6 numerator against the outline) but never how many pieces: there
+   are no part lines in it, so choosing the number stays the child's job, and a wrong number shows
+   itself when a piece pokes past the dashed edge. Rejected: showing the slots for the order's
+   denominator (gives the answer away) and a stacked fraction beside the plate (already in the
+   bubble; reads as a second order).
+5. **Result label** on cream pills (words under the plate, stacked fraction beside it), clear of
+   the dish and stall art.
+6. (Landscape: not changed here; the native shells lock portrait. The web letterbox still fits.)
+7. **Dial**: "pieces" on the hub; buttons on a wider arc (radius 104, up to 170 degrees), 48 unit
+   buttons with 52 unit hit areas and at least 12 units clear between neighbours; a cream band
+   under the dial and results so nothing sits on the cat or the dish.
+
+### NICE items done
+- The e2e hook, the sway-off switch and the level switch are compiled only into debug builds
+  (`__KTN_DEBUG__`; `bun run build:debug` writes `dist-debug/`). The release bundle and the APK
+  contain none of it (checked: no `__ktn` in `dist/` or the APK).
+- Scene timers are tracked and removed on shutdown; `beginOrder` smells gone with the flow.
+- A flick needs dy greater than 1.5 times dx; coalesced pointer events are capped at 8 a move.
+- "Order k of n" is 17 px in a darker brown.
+Not done (art or Phase 1): plate art, recorded voice clips.
+
+### Developer lens: the flow state machine
+`src/game/flow.ts` (pure TypeScript, no Phaser): phases start, choose, cut, serve, notYet,
+matched, end; events start, dial, cut, serve, healed, next, again; effects the scene animates.
+All maths still comes from src/core. `tests/unit/flow.test.ts`: 7 tests over every transition,
+including the dial change after a cut and ignored events in every phase.
+
+### P1 mode
+The dial and the orders come from the level: P1 dial 2 and 4 with half, a quarter, three quarters
+(words only); P2 dial 2, 3, 4, 5, 6, 8 with the three demo orders. Debug builds take `?level=P1`;
+release builds always run P2 and ignore the query.
+
+### Evidence and builds
+`bun run e2e` (debug build, headless Chromium, release CSP): P2 at 390x844 and 1024x1366 and P1 at
+390x844, 24 checks, all pass; 32 screenshots and `summary.json` in `docs/evidence/p0/`.
+`bun run ci` green (194 tests). Debug APK rebuilt after `bunx cap sync android`
+(`android/app/build/outputs/apk/debug/app-debug.apk`, not committed).
+
 ## Phase 0 (12 Nov 2026), native lane A: Capacitor shell, lifecycle, CI for Android and iOS
 
 ### Built

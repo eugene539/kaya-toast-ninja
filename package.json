@@ -18,7 +18,9 @@
     "solver-diff": "bun tools/solver-diff.ts",
     "ci": "bun run typecheck && bun run test && bun run lint:copy && bun run solver-diff && bun run build",
     "cap:sync": "bun run build && bunx cap sync",
-    "android:debug": "bun run cap:sync && cd android && ./gradlew assembleDebug"
+    "android:debug": "bun run cap:sync && cd android && ./gradlew assembleDebug",
+    "build:debug": "bun --bun vite build --mode debug --outDir dist-debug",
+    "e2e": "bun run build:debug && bun tools/e2e-evidence.ts"
   },
   "dependencies": {
     "@capacitor/android": "8.5.3",

@@ -32,7 +32,8 @@ export function attachPointer(canvas: HTMLCanvasElement, sink: SampleSink, onRes
     e.preventDefault();
     // Coalesced events keep a fast finger's path dense; the core intersects segment by segment anyway.
     const list = typeof e.getCoalescedEvents === "function" ? e.getCoalescedEvents() : [];
-    if (list.length > 1) for (const c of list) sink(toSample("move", c));
+    // Capped so a 120 Hz finger cannot flood the frame; the last samples matter most.
+    if (list.length > 1) for (const c of list.slice(-8)) sink(toSample("move", c));
     else sink(toSample("move", e));
   };
   const up = (e: PointerEvent) => sink(toSample("up", e));

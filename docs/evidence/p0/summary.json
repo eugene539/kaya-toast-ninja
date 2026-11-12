@@ -1,20 +1,18 @@
 [
   {
-    "viewport": {
-      "name": "phone",
-      "width": 390,
-      "height": 844
-    },
+    "run": "phone P2",
     "checks": {
       "halfMatched": true,
-      "quarterMatched": true,
-      "notYetShown": true,
+      "dialChangeAfterCut": true,
+      "quarterMatchedNotExact": true,
+      "notYetShownAndWrapped": true,
       "twoSixthsPlaced": true,
       "healed": true,
       "partialThenRest": true,
-      "playAgainCentreWorks": true,
       "eighthsMatched": true,
+      "markExplained": true,
       "ended": true,
+      "playAgainCentreWorks": true,
       "noProblems": true
     },
     "problems": [],
@@ -22,6 +20,15 @@
       {
         "label": "half served",
         "phase": "matched",
+        "level": "P2",
+        "dial": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          8
+        ],
         "order": "P2-1-2",
         "chosen": 2,
         "cutLines": [
@@ -31,13 +38,118 @@
           0
         ],
         "matched": true,
-        "notYets": 0,
+        "retries": 0,
+        "marks": {
+          "exact": true,
+          "smart": true,
+          "tidy": true
+        },
         "message": "Lovely!",
-        "canFill": true
+        "canFill": true,
+        "separated": [
+          true,
+          true
+        ],
+        "messageBounds": {
+          "type": 5,
+          "x": 160.5,
+          "y": 203.1015625,
+          "width": 69,
+          "height": 21.796875
+        }
+      },
+      {
+        "label": "quarter on six, one placed",
+        "phase": "serve",
+        "level": "P2",
+        "dial": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          8
+        ],
+        "order": "P2-1-4",
+        "chosen": 6,
+        "cutLines": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "served": [
+          0
+        ],
+        "matched": false,
+        "retries": 0,
+        "marks": null,
+        "message": "Flick the pieces onto the plate.",
+        "canFill": false,
+        "separated": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "messageBounds": {
+          "type": 5,
+          "x": 47.5,
+          "y": 203.1015625,
+          "width": 295,
+          "height": 21.796875
+        }
+      },
+      {
+        "label": "dial changed after cut",
+        "phase": "cut",
+        "level": "P2",
+        "dial": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          8
+        ],
+        "order": "P2-1-4",
+        "chosen": 4,
+        "cutLines": [],
+        "served": [],
+        "matched": false,
+        "retries": 1,
+        "marks": null,
+        "message": "New toast. Swipe across it.",
+        "canFill": true,
+        "separated": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "messageBounds": {
+          "type": 5,
+          "x": 68.5,
+          "y": 203.1015625,
+          "width": 253,
+          "height": 21.796875
+        }
       },
       {
         "label": "quarter served",
         "phase": "matched",
+        "level": "P2",
+        "dial": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          8
+        ],
         "order": "P2-1-4",
         "chosen": 4,
         "cutLines": [
@@ -49,13 +161,40 @@
           2
         ],
         "matched": true,
-        "notYets": 0,
+        "retries": 1,
+        "marks": {
+          "exact": false,
+          "smart": true,
+          "tidy": true
+        },
         "message": "Lovely!",
-        "canFill": true
+        "canFill": true,
+        "separated": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "messageBounds": {
+          "type": 5,
+          "x": 160.5,
+          "y": 203.1015625,
+          "width": 69,
+          "height": 21.796875
+        }
       },
       {
         "label": "two sixths placed",
-        "phase": "cut",
+        "phase": "serve",
+        "level": "P2",
+        "dial": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          8
+        ],
         "order": "P2-3-8",
         "chosen": 6,
         "cutLines": [
@@ -70,13 +209,38 @@
           1
         ],
         "matched": false,
-        "notYets": 0,
+        "retries": 0,
+        "marks": null,
         "message": "Flick the pieces onto the plate.",
-        "canFill": false
+        "canFill": false,
+        "separated": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "messageBounds": {
+          "type": 5,
+          "x": 47.5,
+          "y": 203.1015625,
+          "width": 295,
+          "height": 21.796875
+        }
       },
       {
         "label": "third sixth",
-        "phase": "busy",
+        "phase": "notYet",
+        "level": "P2",
+        "dial": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          8
+        ],
         "order": "P2-3-8",
         "chosen": 6,
         "cutLines": [
@@ -91,25 +255,68 @@
           1
         ],
         "matched": false,
-        "notYets": 1,
+        "retries": 1,
+        "marks": null,
         "message": "Not yet. Try another number of pieces.",
-        "canFill": false
+        "canFill": false,
+        "separated": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "messageBounds": {
+          "type": 5,
+          "x": 47.5,
+          "y": 192.203125,
+          "width": 295,
+          "height": 43.59375
+        }
       },
       {
         "label": "healed",
         "phase": "choose",
+        "level": "P2",
+        "dial": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          8
+        ],
         "order": "P2-3-8",
         "chosen": null,
         "cutLines": [],
         "served": [],
         "matched": false,
-        "notYets": 1,
+        "retries": 1,
+        "marks": null,
         "message": "Into how many?",
-        "canFill": null
+        "canFill": null,
+        "separated": [],
+        "messageBounds": {
+          "type": 5,
+          "x": 121.5,
+          "y": 203.1015625,
+          "width": 147,
+          "height": 21.796875
+        }
       },
       {
         "label": "partial cut",
-        "phase": "cut",
+        "phase": "serve",
+        "level": "P2",
+        "dial": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          8
+        ],
         "order": "P2-3-8",
         "chosen": 8,
         "cutLines": [
@@ -121,13 +328,40 @@
         ],
         "served": [],
         "matched": false,
-        "notYets": 1,
+        "retries": 1,
+        "marks": null,
         "message": "Keep cutting.",
-        "canFill": true
+        "canFill": true,
+        "separated": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          false,
+          false,
+          false
+        ],
+        "messageBounds": {
+          "type": 5,
+          "x": 131.5,
+          "y": 203.1015625,
+          "width": 127,
+          "height": 21.796875
+        }
       },
       {
         "label": "second cut",
-        "phase": "cut",
+        "phase": "serve",
+        "level": "P2",
+        "dial": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          8
+        ],
         "order": "P2-3-8",
         "chosen": 8,
         "cutLines": [
@@ -141,13 +375,40 @@
         ],
         "served": [],
         "matched": false,
-        "notYets": 1,
+        "retries": 1,
+        "marks": null,
         "message": "Flick the pieces onto the plate.",
-        "canFill": true
+        "canFill": true,
+        "separated": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "messageBounds": {
+          "type": 5,
+          "x": 47.5,
+          "y": 203.1015625,
+          "width": 295,
+          "height": 21.796875
+        }
       },
       {
         "label": "three eighths served",
         "phase": "matched",
+        "level": "P2",
+        "dial": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          8
+        ],
         "order": "P2-3-8",
         "chosen": 8,
         "cutLines": [
@@ -165,13 +426,99 @@
           6
         ],
         "matched": true,
-        "notYets": 1,
+        "retries": 1,
+        "marks": {
+          "exact": false,
+          "smart": true,
+          "tidy": false
+        },
         "message": "Lovely!",
-        "canFill": true
+        "canFill": true,
+        "separated": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "messageBounds": {
+          "type": 5,
+          "x": 160.5,
+          "y": 203.1015625,
+          "width": 69,
+          "height": 21.796875
+        }
+      },
+      {
+        "label": "smart explained",
+        "phase": "matched",
+        "level": "P2",
+        "dial": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          8
+        ],
+        "order": "P2-3-8",
+        "chosen": 8,
+        "cutLines": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "served": [
+          1,
+          4,
+          6
+        ],
+        "matched": true,
+        "retries": 1,
+        "marks": {
+          "exact": false,
+          "smart": true,
+          "tidy": false
+        },
+        "message": "Smart. The fewest pieces.",
+        "canFill": true,
+        "separated": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "messageBounds": {
+          "type": 5,
+          "x": 72.5,
+          "y": 203.1015625,
+          "width": 245,
+          "height": 21.796875
+        }
       },
       {
         "label": "end",
         "phase": "end",
+        "level": "P2",
+        "dial": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          8
+        ],
         "order": "P2-3-8",
         "chosen": 8,
         "cutLines": [
@@ -189,40 +536,78 @@
           6
         ],
         "matched": true,
-        "notYets": 1,
+        "retries": 1,
+        "marks": {
+          "exact": false,
+          "smart": true,
+          "tidy": false
+        },
         "message": "All three orders served.",
-        "canFill": true
+        "canFill": true,
+        "separated": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "messageBounds": {
+          "type": 5,
+          "x": 83,
+          "y": 203.1015625,
+          "width": 224,
+          "height": 21.796875
+        }
       },
       {
         "label": "again",
         "phase": "choose",
+        "level": "P2",
+        "dial": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          8
+        ],
         "order": "P2-1-2",
         "chosen": null,
         "cutLines": [],
         "served": [],
         "matched": false,
-        "notYets": 0,
+        "retries": 0,
+        "marks": null,
         "message": "Into how many?",
-        "canFill": null
+        "canFill": null,
+        "separated": [],
+        "messageBounds": {
+          "type": 5,
+          "x": 121.5,
+          "y": 203.1015625,
+          "width": 147,
+          "height": 21.796875
+        }
       }
     ]
   },
   {
-    "viewport": {
-      "name": "tablet",
-      "width": 1024,
-      "height": 1366
-    },
+    "run": "tablet P2",
     "checks": {
       "halfMatched": true,
-      "quarterMatched": true,
-      "notYetShown": true,
+      "dialChangeAfterCut": true,
+      "quarterMatchedNotExact": true,
+      "notYetShownAndWrapped": true,
       "twoSixthsPlaced": true,
       "healed": true,
       "partialThenRest": true,
-      "playAgainCentreWorks": true,
       "eighthsMatched": true,
+      "markExplained": true,
       "ended": true,
+      "playAgainCentreWorks": true,
       "noProblems": true
     },
     "problems": [],
@@ -230,6 +615,15 @@
       {
         "label": "half served",
         "phase": "matched",
+        "level": "P2",
+        "dial": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          8
+        ],
         "order": "P2-1-2",
         "chosen": 2,
         "cutLines": [
@@ -239,13 +633,118 @@
           0
         ],
         "matched": true,
-        "notYets": 0,
+        "retries": 0,
+        "marks": {
+          "exact": true,
+          "smart": true,
+          "tidy": true
+        },
         "message": "Lovely!",
-        "canFill": true
+        "canFill": true,
+        "separated": [
+          true,
+          true
+        ],
+        "messageBounds": {
+          "type": 5,
+          "x": 160.5,
+          "y": 203.1015625,
+          "width": 69,
+          "height": 21.796875
+        }
+      },
+      {
+        "label": "quarter on six, one placed",
+        "phase": "serve",
+        "level": "P2",
+        "dial": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          8
+        ],
+        "order": "P2-1-4",
+        "chosen": 6,
+        "cutLines": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "served": [
+          0
+        ],
+        "matched": false,
+        "retries": 0,
+        "marks": null,
+        "message": "Flick the pieces onto the plate.",
+        "canFill": false,
+        "separated": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "messageBounds": {
+          "type": 5,
+          "x": 47.5,
+          "y": 203.1015625,
+          "width": 295,
+          "height": 21.796875
+        }
+      },
+      {
+        "label": "dial changed after cut",
+        "phase": "cut",
+        "level": "P2",
+        "dial": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          8
+        ],
+        "order": "P2-1-4",
+        "chosen": 4,
+        "cutLines": [],
+        "served": [],
+        "matched": false,
+        "retries": 1,
+        "marks": null,
+        "message": "New toast. Swipe across it.",
+        "canFill": true,
+        "separated": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "messageBounds": {
+          "type": 5,
+          "x": 68.5,
+          "y": 203.1015625,
+          "width": 253,
+          "height": 21.796875
+        }
       },
       {
         "label": "quarter served",
         "phase": "matched",
+        "level": "P2",
+        "dial": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          8
+        ],
         "order": "P2-1-4",
         "chosen": 4,
         "cutLines": [
@@ -257,13 +756,40 @@
           2
         ],
         "matched": true,
-        "notYets": 0,
+        "retries": 1,
+        "marks": {
+          "exact": false,
+          "smart": true,
+          "tidy": true
+        },
         "message": "Lovely!",
-        "canFill": true
+        "canFill": true,
+        "separated": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "messageBounds": {
+          "type": 5,
+          "x": 160.5,
+          "y": 203.1015625,
+          "width": 69,
+          "height": 21.796875
+        }
       },
       {
         "label": "two sixths placed",
-        "phase": "cut",
+        "phase": "serve",
+        "level": "P2",
+        "dial": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          8
+        ],
         "order": "P2-3-8",
         "chosen": 6,
         "cutLines": [
@@ -278,13 +804,38 @@
           1
         ],
         "matched": false,
-        "notYets": 0,
+        "retries": 0,
+        "marks": null,
         "message": "Flick the pieces onto the plate.",
-        "canFill": false
+        "canFill": false,
+        "separated": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "messageBounds": {
+          "type": 5,
+          "x": 47.5,
+          "y": 203.1015625,
+          "width": 295,
+          "height": 21.796875
+        }
       },
       {
         "label": "third sixth",
-        "phase": "busy",
+        "phase": "notYet",
+        "level": "P2",
+        "dial": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          8
+        ],
         "order": "P2-3-8",
         "chosen": 6,
         "cutLines": [
@@ -299,25 +850,68 @@
           1
         ],
         "matched": false,
-        "notYets": 1,
+        "retries": 1,
+        "marks": null,
         "message": "Not yet. Try another number of pieces.",
-        "canFill": false
+        "canFill": false,
+        "separated": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "messageBounds": {
+          "type": 5,
+          "x": 47.5,
+          "y": 192.203125,
+          "width": 295,
+          "height": 43.59375
+        }
       },
       {
         "label": "healed",
         "phase": "choose",
+        "level": "P2",
+        "dial": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          8
+        ],
         "order": "P2-3-8",
         "chosen": null,
         "cutLines": [],
         "served": [],
         "matched": false,
-        "notYets": 1,
+        "retries": 1,
+        "marks": null,
         "message": "Into how many?",
-        "canFill": null
+        "canFill": null,
+        "separated": [],
+        "messageBounds": {
+          "type": 5,
+          "x": 121.5,
+          "y": 203.1015625,
+          "width": 147,
+          "height": 21.796875
+        }
       },
       {
         "label": "partial cut",
-        "phase": "cut",
+        "phase": "serve",
+        "level": "P2",
+        "dial": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          8
+        ],
         "order": "P2-3-8",
         "chosen": 8,
         "cutLines": [
@@ -329,13 +923,40 @@
         ],
         "served": [],
         "matched": false,
-        "notYets": 1,
+        "retries": 1,
+        "marks": null,
         "message": "Keep cutting.",
-        "canFill": true
+        "canFill": true,
+        "separated": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          false,
+          false,
+          false
+        ],
+        "messageBounds": {
+          "type": 5,
+          "x": 131.5,
+          "y": 203.1015625,
+          "width": 127,
+          "height": 21.796875
+        }
       },
       {
         "label": "second cut",
-        "phase": "cut",
+        "phase": "serve",
+        "level": "P2",
+        "dial": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          8
+        ],
         "order": "P2-3-8",
         "chosen": 8,
         "cutLines": [
@@ -349,13 +970,40 @@
         ],
         "served": [],
         "matched": false,
-        "notYets": 1,
+        "retries": 1,
+        "marks": null,
         "message": "Flick the pieces onto the plate.",
-        "canFill": true
+        "canFill": true,
+        "separated": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "messageBounds": {
+          "type": 5,
+          "x": 47.5,
+          "y": 203.1015625,
+          "width": 295,
+          "height": 21.796875
+        }
       },
       {
         "label": "three eighths served",
         "phase": "matched",
+        "level": "P2",
+        "dial": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          8
+        ],
         "order": "P2-3-8",
         "chosen": 8,
         "cutLines": [
@@ -373,13 +1021,99 @@
           6
         ],
         "matched": true,
-        "notYets": 1,
+        "retries": 1,
+        "marks": {
+          "exact": false,
+          "smart": true,
+          "tidy": false
+        },
         "message": "Lovely!",
-        "canFill": true
+        "canFill": true,
+        "separated": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "messageBounds": {
+          "type": 5,
+          "x": 160.5,
+          "y": 203.1015625,
+          "width": 69,
+          "height": 21.796875
+        }
+      },
+      {
+        "label": "smart explained",
+        "phase": "matched",
+        "level": "P2",
+        "dial": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          8
+        ],
+        "order": "P2-3-8",
+        "chosen": 8,
+        "cutLines": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "served": [
+          1,
+          4,
+          6
+        ],
+        "matched": true,
+        "retries": 1,
+        "marks": {
+          "exact": false,
+          "smart": true,
+          "tidy": false
+        },
+        "message": "Smart. The fewest pieces.",
+        "canFill": true,
+        "separated": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "messageBounds": {
+          "type": 5,
+          "x": 72.5,
+          "y": 203.1015625,
+          "width": 245,
+          "height": 21.796875
+        }
       },
       {
         "label": "end",
         "phase": "end",
+        "level": "P2",
+        "dial": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          8
+        ],
         "order": "P2-3-8",
         "chosen": 8,
         "cutLines": [
@@ -397,21 +1131,255 @@
           6
         ],
         "matched": true,
-        "notYets": 1,
+        "retries": 1,
+        "marks": {
+          "exact": false,
+          "smart": true,
+          "tidy": false
+        },
         "message": "All three orders served.",
-        "canFill": true
+        "canFill": true,
+        "separated": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "messageBounds": {
+          "type": 5,
+          "x": 83,
+          "y": 203.1015625,
+          "width": 224,
+          "height": 21.796875
+        }
       },
       {
         "label": "again",
         "phase": "choose",
+        "level": "P2",
+        "dial": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          8
+        ],
         "order": "P2-1-2",
         "chosen": null,
         "cutLines": [],
         "served": [],
         "matched": false,
-        "notYets": 0,
+        "retries": 0,
+        "marks": null,
         "message": "Into how many?",
-        "canFill": null
+        "canFill": null,
+        "separated": [],
+        "messageBounds": {
+          "type": 5,
+          "x": 121.5,
+          "y": 203.1015625,
+          "width": 147,
+          "height": 21.796875
+        }
+      }
+    ]
+  },
+  {
+    "run": "phone P1",
+    "checks": {
+      "p1Dial": true,
+      "p1Half": true,
+      "p1Quarter": true,
+      "p1NotYet": true,
+      "p1ThreeQuarters": true,
+      "noProblems": true
+    },
+    "problems": [],
+    "log": [
+      {
+        "label": "p1 start",
+        "phase": "choose",
+        "level": "P1",
+        "dial": [
+          2,
+          4
+        ],
+        "order": "P1-1-2",
+        "chosen": null,
+        "cutLines": [],
+        "served": [],
+        "matched": false,
+        "retries": 0,
+        "marks": null,
+        "message": "Into how many?",
+        "canFill": null,
+        "separated": [],
+        "messageBounds": {
+          "type": 5,
+          "x": 121.5,
+          "y": 203.1015625,
+          "width": 147,
+          "height": 21.796875
+        }
+      },
+      {
+        "label": "p1 half",
+        "phase": "matched",
+        "level": "P1",
+        "dial": [
+          2,
+          4
+        ],
+        "order": "P1-1-2",
+        "chosen": 2,
+        "cutLines": [
+          1
+        ],
+        "served": [
+          1
+        ],
+        "matched": true,
+        "retries": 0,
+        "marks": {
+          "exact": true,
+          "smart": true,
+          "tidy": true
+        },
+        "message": "Flick the pieces onto the plate.",
+        "canFill": true,
+        "separated": [
+          true,
+          true
+        ],
+        "messageBounds": {
+          "type": 5,
+          "x": 47.5,
+          "y": 203.1015625,
+          "width": 295,
+          "height": 21.796875
+        }
+      },
+      {
+        "label": "p1 quarter",
+        "phase": "matched",
+        "level": "P1",
+        "dial": [
+          2,
+          4
+        ],
+        "order": "P1-1-4",
+        "chosen": 4,
+        "cutLines": [
+          1,
+          2,
+          3
+        ],
+        "served": [
+          0
+        ],
+        "matched": true,
+        "retries": 0,
+        "marks": {
+          "exact": true,
+          "smart": true,
+          "tidy": true
+        },
+        "message": "Lovely!",
+        "canFill": true,
+        "separated": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "messageBounds": {
+          "type": 5,
+          "x": 160.5,
+          "y": 203.1015625,
+          "width": 69,
+          "height": 21.796875
+        }
+      },
+      {
+        "label": "p1 three quarters on two",
+        "phase": "notYet",
+        "level": "P1",
+        "dial": [
+          2,
+          4
+        ],
+        "order": "P1-3-4",
+        "chosen": 2,
+        "cutLines": [
+          1
+        ],
+        "served": [
+          0
+        ],
+        "matched": false,
+        "retries": 1,
+        "marks": null,
+        "message": "Not yet. Try another number of pieces.",
+        "canFill": false,
+        "separated": [
+          true,
+          true
+        ],
+        "messageBounds": {
+          "type": 5,
+          "x": 47.5,
+          "y": 192.203125,
+          "width": 295,
+          "height": 43.59375
+        }
+      },
+      {
+        "label": "p1 three quarters",
+        "phase": "matched",
+        "level": "P1",
+        "dial": [
+          2,
+          4
+        ],
+        "order": "P1-3-4",
+        "chosen": 4,
+        "cutLines": [
+          1,
+          2,
+          3
+        ],
+        "served": [
+          0,
+          1,
+          3
+        ],
+        "matched": true,
+        "retries": 1,
+        "marks": {
+          "exact": false,
+          "smart": true,
+          "tidy": true
+        },
+        "message": "Lovely!",
+        "canFill": true,
+        "separated": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "messageBounds": {
+          "type": 5,
+          "x": 160.5,
+          "y": 203.1015625,
+          "width": 69,
+          "height": 21.796875
+        }
       }
     ]
   }

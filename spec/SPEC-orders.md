@@ -129,7 +129,9 @@ until a wider toast or a zoomed serve exists (revisit in Phase 1 on the A10 iPad
 ## 8. Marks (never a fail)
 
 When an order is matched the child gets marks, each true or false, never a penalty:
-- **Exact**: matched with no "Not yet" during this order (the first number chosen could fill it);
+- **Exact**: matched on the first toast cut this order: no "Not yet" and no starting the toast
+  again after cutting (changing the dial before the first cut is free). The scene passes the count
+  of both as `notYets`;
 - **Smart**: the matched plate used `fewestPieces` pieces (for simplest-form orders, the child
   chose the order's own denominator);
 - **Tidy**: the partition that matched was fully cut by one swipe (`swipesOnFinal === 1`, where

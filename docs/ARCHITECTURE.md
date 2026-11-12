@@ -9,7 +9,8 @@
   (swipe to cuts: Rule A across, Rule B along with a third-of-a-gap forgiveness), `partition`
   (pieces with rational sizes, groups, the PLAN-v6 cut layout), `serve` (the serve rule),
   `marks`, `orders` with `generator/p1` and `generator/p2`.
-- `src/game/` draws and animates only: `PrototypeScene` (the Phase 0 scene), `pointer` (DOM pointer
+- `src/game/` draws and animates only: `flow.ts` (the order state machine, pure TypeScript, unit
+  tested), `PrototypeScene` (turns input into flow events and animates the effects), `pointer` (DOM pointer
   events with pointer capture, converted to design space with a transform recomputed on every
   pointer-down and resize), `audio` (placeholder Web Audio effects, unlocked on the first tap),
   `placeholderVoice` (offline speech synthesis, never shipped), `toastTexture` (the toast and the
