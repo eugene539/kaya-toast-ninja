@@ -1,0 +1,4 @@
+[test]
+# Unit tests (builders) and adversarial tests (Codex, spec only) both import the
+# public core through the "@core" alias declared in tsconfig.json.
+root = "tests"

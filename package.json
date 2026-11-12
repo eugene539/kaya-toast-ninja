@@ -1,0 +1,29 @@
+{
+  "name": "kaya-toast-ninja",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "description": "Kaya Toast Ninja: a free fractions arcade for P1 and P2 children by Genius Plus Academy.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "bun test tests/unit tests/adversarial",
+    "test:unit": "bun test tests/unit",
+    "test:adversarial": "bun test tests/adversarial",
+    "lint:copy": "bun tools/copy-lint.ts",
+    "orders": "bun tools/enumerate-orders.ts",
+    "solver-diff": "bun tools/solver-diff.ts",
+    "ci": "bun run typecheck && bun run test && bun run lint:copy && bun run solver-diff && bun run build"
+  },
+  "dependencies": {
+    "phaser": "3.90.0"
+  },
+  "devDependencies": {
+    "@types/bun": "1.4.4",
+    "playwright-core": "1.65.0",
+    "typescript": "7.0.2",
+    "vite": "8.3.8"
+  }
+}
