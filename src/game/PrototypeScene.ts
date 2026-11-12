@@ -31,8 +31,9 @@ import {
 } from "../core/index";
 import { COPY, customerLine } from "../copy/strings";
 import { Sfx } from "./audio";
+import { attachLifecycle } from "./lifecycle";
 import { attachPointer } from "./pointer";
-import { speakPlaceholder, warmVoices } from "./placeholderVoice";
+import { speakPlaceholder, stopPlaceholderSpeech, warmVoices } from "./placeholderVoice";
 import { EDGE_KEY, makeToastTextures, TOAST_KEY } from "./toastTexture";
 import { stackedFraction } from "./ui/StackedFraction";
 
@@ -133,6 +134,14 @@ export class PrototypeScene extends Phaser.Scene {
     const canvas = this.game.canvas;
     const detach = attachPointer(canvas, (s) => this.onSample(s), () => this.onReset());
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, detach);
+    const detachLifecycle = attachLifecycle({
+      onPause: () => {
+        this.sfx.suspend();
+        stopPlaceholderSpeech();
+      },
+      onResume: () => this.sfx.resume(),
+    });
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, detachLifecycle);
     if (this.e2e) this.exposeDebug();
   }
 

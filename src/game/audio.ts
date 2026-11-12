@@ -1,7 +1,12 @@
 // Placeholder sound effects synthesised with Web Audio (no files, no network). Real CC0 effects
 // arrive in Phase 2. The context is unlocked on the first tap and resumed on any later tap.
+// Lifecycle (Docs/10 section 2.3, Audio): the app suspends it on pause and resumes it on app
+// resume (src/game/lifecycle.ts); an interruption or a headphone route change that stops it while
+// the app is in front is retried once from its statechange; if a resume fails, the next tap
+// (unlock) recovers it.
 export class Sfx {
   private ctx: AudioContext | null = null;
+  private paused = false;
 
   /** Call from every pointer-down: creates or resumes the context inside a user gesture. */
   unlock(): void {
@@ -10,11 +15,42 @@ export class Sfx {
         const Ctor = window.AudioContext ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
         if (!Ctor) return;
         this.ctx = new Ctor();
+        this.ctx.addEventListener("statechange", () => this.onStateChange());
       }
-      if (this.ctx.state !== "running") void this.ctx.resume();
+      this.paused = false;
+      if (this.ctx.state !== "running") this.tryResume();
     } catch {
       this.ctx = null;
     }
+  }
+
+  /** App went to the background: stop the audio clock (saves battery, frees the session). */
+  suspend(): void {
+    this.paused = true;
+    const ctx = this.ctx;
+    if (!ctx || ctx.state === "closed") return;
+    ctx.suspend().catch(() => undefined);
+  }
+
+  /** App came back: resume if the child has already unlocked audio. Failure is left to the next tap. */
+  resume(): void {
+    this.paused = false;
+    if (this.ctx && this.ctx.state !== "running") this.tryResume();
+  }
+
+  private tryResume(): void {
+    const ctx = this.ctx;
+    if (!ctx || ctx.state === "closed") return;
+    ctx.resume().catch(() => undefined);
+  }
+
+  // iOS reports "interrupted" (a call, Siri, another app's audio) and both platforms may suspend on
+  // a route change. Retry only while in front; statechange fires once per change, so no loop.
+  private onStateChange(): void {
+    const ctx = this.ctx;
+    if (!ctx || this.paused || ctx.state === "running" || ctx.state === "closed") return;
+    if (typeof document !== "undefined" && document.visibilityState !== "visible") return;
+    this.tryResume();
   }
 
   get unlocked(): boolean {

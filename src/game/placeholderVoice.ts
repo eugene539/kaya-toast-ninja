@@ -27,3 +27,12 @@ export function speakPlaceholder(text: string): void {
     /* speech is optional */
   }
 }
+
+/** App went to the background: stop any line mid-sentence. */
+export function stopPlaceholderSpeech(): void {
+  try {
+    window.speechSynthesis?.cancel();
+  } catch {
+    /* speech is optional */
+  }
+}
