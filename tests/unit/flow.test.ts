@@ -48,6 +48,16 @@ describe("flow: the order state machine", () => {
     expect(s.orderIdx).toBe(0);
   });
 
+  test("Tidy needs the whole partition cut: a match from a partial cut is not Tidy", () => {
+    // Half order on four: one swipe cuts lines 1 and 2 only; strips 0 and 1 make a half, 2 and 3 stay joined.
+    let { s, kinds } = run(initialFlow("P2"), { type: "start" }, { type: "dial", d: 4 }, { type: "cut", lines: [1, 2] }, { type: "serve", k: 0 }, { type: "serve", k: 1 });
+    expect(kinds).toEqual(["orderBegun", "chosen", "cut", "placed", "matched"]);
+    expect(s.marks).toEqual({ exact: true, smart: false, tidy: false });
+    // The same order fully cut by one swipe is Tidy.
+    ({ s } = run(initialFlow("P2"), { type: "start" }, { type: "dial", d: 4 }, all(4), { type: "serve", k: 0 }, { type: "serve", k: 1 }));
+    expect(s.marks).toEqual({ exact: true, smart: false, tidy: true });
+  });
+
   test("the dial can change before cutting, freely", () => {
     const { s } = run(initialFlow("P2"), { type: "start" }, { type: "dial", d: 6 }, { type: "dial", d: 2 });
     expect(s.chosen).toBe(2);

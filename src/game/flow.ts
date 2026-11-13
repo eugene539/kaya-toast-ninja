@@ -176,7 +176,9 @@ export function step(s: FlowState, e: FlowEvent): FlowStep {
         case "matched": {
           const served = [...s.served, k];
           const order = s.orders[s.orderIdx]!;
-          const marks = marksFor(order, s.dial, { notYets: s.retries, finalDenominator: d, swipesOnFinal: s.swipes });
+          const m = marksFor(order, s.dial, { notYets: s.retries, finalDenominator: d, swipesOnFinal: s.swipes });
+          // SPEC-orders: Tidy needs the matching partition fully cut (every line) by one swipe.
+          const marks = s.cutLines.length === d - 1 ? m : { ...m, tidy: false };
           return {
             state: { ...s, phase: "matched", plate: res.plate, served, marks },
             effects: [{ kind: "matched", k, slot: served.length - 1, marks }],

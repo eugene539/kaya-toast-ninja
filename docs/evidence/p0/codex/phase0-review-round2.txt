@@ -1,0 +1,6 @@
+codex
+Typechecking and all 194 tests pass, but scene-level input handling rejects valid cuts after partial separation and lets invisible dial targets intercept visible result controls.
+
+Full review comments:
+
+- [P2] Restrict serve flicks to separated pieces at /Users/general-work/dev/kaya-toast-ninja/src/game/PrototypeScene.ts:369-371
