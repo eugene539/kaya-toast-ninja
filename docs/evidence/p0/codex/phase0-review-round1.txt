@@ -1,0 +1,14 @@
+codex
+Typechecking and all 194 tests pass, but scene-level input handling rejects valid cuts after partial separation and lets invisible dial targets intercept visible result controls.
+
+Full review comments:
+
+- [P2] Restrict serve flicks to separated pieces at /Users/general-work/dev/kaya-toast-ninja/src/game/PrototypeScene.ts:369-371
+  After a partial cut, `pieceAt()` also returns joined strips, so a downward swipe along a remaining snap line dispatches `serve` and returns before cut resolution. For example, choose four pieces, cut line 2, then swipe down along line 1 inside the left group: the core resolves a valid cut, but the scene merely refuses the serve. Require `isSeparated()` before taking this shortcut so joined groups remain cuttable.
+
+- [P2] Exclude hidden dial buttons from hit testing at /Users/general-work/dev/kaya-toast-ninja/src/game/PrototypeScene.ts:343-345
+  When results appear, the dial is hidden but its hit targets remain ahead of the result buttons. In P2, tapping the visible Exact chip at design coordinates (114, 746) hits `dial:3`, and tapping Next at (110, 802) hits `dial:2`. The later visibility check prevents dial dispatch but never retries the visible button, leaving parts of the controls unresponsive. Skip hidden dial targets during hit testing.
+Typechecking and all 194 tests pass, but scene-level input handling rejects valid cuts after partial separation and lets invisible dial targets intercept visible result controls.
+
+Full review comments:
+

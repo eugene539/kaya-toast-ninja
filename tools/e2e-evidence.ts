@@ -37,8 +37,13 @@ async function st(page: Page) {
   return page.evaluate(() => (window as any).__ktn.state());
 }
 async function btn(page: Page, id: string): Promise<Pt> {
-  const p = await page.evaluate((i) => (window as any).__ktn.button(i), id);
-  if (!p) throw new Error(`button ${id} not found`);
+  // Poll: the result buttons appear after the serve animation, which can lag on a busy machine.
+  let p: Pt | null = null;
+  for (let t = 0; t < 30 && !p; t++) {
+    p = await page.evaluate((i) => (window as any).__ktn.button(i), id);
+    if (!p) await wait(100);
+  }
+  if (!p) throw new Error(`button ${id} not found after 3 s; state ${JSON.stringify(await st(page))}`);
   return p;
 }
 async function tap(page: Page, p: Pt) {

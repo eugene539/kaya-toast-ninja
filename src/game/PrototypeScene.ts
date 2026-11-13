@@ -341,7 +341,11 @@ export class PrototypeScene extends Phaser.Scene {
   }
 
   private hitButton(p: Vec2): string | null {
-    for (const b of this.buttons) if (Math.abs(p.x - b.x) <= b.hw && Math.abs(p.y - b.y) <= b.hh) return b.id;
+    for (const b of this.buttons) {
+      // Hidden dial buttons keep their hit boxes; skip them so they never shadow the visible result controls.
+      if (b.id.startsWith("dial:") && !this.dialLayer.visible) continue;
+      if (Math.abs(p.x - b.x) <= b.hw && Math.abs(p.y - b.y) <= b.hh) return b.id;
+    }
     return null;
   }
 
@@ -366,7 +370,8 @@ export class PrototypeScene extends Phaser.Scene {
     const k = this.pieceAt(first);
     const dx = last.x - first.x;
     const dy = last.y - first.y;
-    if (k !== null && dy > 30 && dy > 1.5 * Math.abs(dx)) {
+    // Only a separated piece can be flicked to the plate; a downward swipe over a joined group is a cut.
+    if (k !== null && isSeparated(f.chosen, f.cutLines, k) && dy > 30 && dy > 1.5 * Math.abs(dx)) {
       this.dispatch({ type: "serve", k }); // a flick towards the plate
       return;
     }
